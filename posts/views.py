@@ -2,11 +2,6 @@ from django.shortcuts import render
 from django.db.models import Q 
 from .models import Category, Post, Author
 
-def get_author(user):
-    qs = Author.objects.filter(user=user)
-    if qs.exists():
-        return qs[0]
-    return None
 
 def homepage (request):
     categories = Category.objects.all()[0:3]
@@ -21,10 +16,8 @@ def homepage (request):
 
 def post (request,slug):
     post = Post.objects.get(slug = slug)
-    latest = Post.objects.order_by('-timestamp')[:3]
     context = {
         'post': post,
-        'latest': latest,
     }
     return render(request, 'post.html', context)
 
@@ -42,7 +35,7 @@ def search(request):
     context = {
         'object_list': queryset
     }
-    return render(request, 'search_bar.html', context)
+    return render(request, 'search_results.html', context)
 
 
 def postlist (request,slug):
